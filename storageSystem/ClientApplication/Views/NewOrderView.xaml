@@ -1,0 +1,41 @@
+﻿<Window x:Class="ClientApplication.Views.NewOrderView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:ClientApplication.ViewModel"
+        xmlns:local="clr-namespace:ClientApplication.Views"
+        xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+        mc:Ignorable="d"
+        Title="Nowe zamówienie" Height="300" Width="300">
+    <Window.DataContext>
+        <vm:NewOrderVM></vm:NewOrderVM>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Content="nazwa Produktu" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"></Label>
+        <Label Grid.Column="0" Grid.Row="1" Content="kod Produktu" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"></Label>
+        <Label Grid.Column="0" Grid.Row="2" Content="rodzaj przesyłki" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"></Label>
+        <Label Grid.Column="0" Grid.Row="3" Content="adres dostawy" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"></Label>
+        <Label Grid.Column="0" Grid.Row="4" Content="ilość" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10"></Label>
+        <TextBox Grid.Column="1" Name="name" Grid.Row="0" Margin="10" IsEnabled="False" Text="{Binding NameProduct, Mode=OneWay}" ></TextBox>
+        <toolkit:AutoCompleteBox   Grid.Column="1" Grid.Row="2" Margin="10" ItemsSource="{Binding DeliveryList, UpdateSourceTrigger=PropertyChanged}"   
+                                   IsTextCompletionEnabled="True"
+                                   Text="{Binding DeliveryMethod, Mode=TwoWay, UpdateSourceTrigger =PropertyChanged}" />
+        <TextBox Grid.Column="1" Name="code" Grid.Row="1" Margin="10" IsEnabled="False" Text="{Binding CodeProduct, Mode=OneWay}" ></TextBox>
+        <TextBox Grid.Column="1" Name="address" Grid.Row="3" Margin="10" Text="{Binding Address}"></TextBox>
+        <TextBox Grid.Column="1" Name="ilość" Grid.Row="4" Margin="10" Text="{Binding Quantity}"></TextBox>
+        <Button Content="Zatwierdź" Grid.Row="5" Grid.ColumnSpan="2" Margin="30,10" Command="{Binding SubmitCommand}"></Button>
+    </Grid>
+</Window>

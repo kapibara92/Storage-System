@@ -1,0 +1,85 @@
+﻿@model WebStorageApplication.Models.OrderList
+
+@{
+    ViewBag.Title = "Dodaj zamówienie";
+}
+<h2>Dodaj zamówienie</h2>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>zamówienie na wybrany produkt</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.Label("adres przesyłki", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <script src="~/Scripts/autocomplete.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+               
+                var people;
+                    $.ajax({
+                        url: "@Url.Action("Autocomplete", "Home", new { value = Model.delivery })"
+                    })
+                      .success(function (data) {
+                          addMethod(data);
+                        
+                         
+                      });
+                });
+        </script>
+        <div class="form-group">
+            @Html.Label("rodzaj przesyłki", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.delivery, new { htmlAttributes = new { @class = "form-control", id="delivery", autocomplete = "off", } })
+                @Html.ValidationMessageFor(model => model.delivery, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("nazwa Produktu", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DisplayFor(model => model.nameProduct)
+                @*@Html.EditorFor(model => model.nameProduct, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.nameProduct, "", new { @class = "text-danger" })*@
+            </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("kod Produktu", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <p>@ViewBag.CodeProduct</p>
+                </div>
+            </div>
+
+        <div class="form-group">
+            @Html.Label("ilość produktu", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.quantity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.quantity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Zapisz" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Powrót do listy produktów", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

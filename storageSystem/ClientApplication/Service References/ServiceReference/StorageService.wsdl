@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://storageService.org" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://storageService.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">WebServices sluzacy do poloczenia z bazą magazynu</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://storageService.org">
+      <s:element name="AddOrder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="nameProduct" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="delivery" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="address" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="quantity" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="code" type="s:long" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddOrderResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="showProducts">
+        <s:complexType />
+      </s:element>
+      <s:element name="showProductsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="showProductsResult" type="tns:ArrayOfProductList" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfProductList">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ProductList" nillable="true" type="tns:ProductList" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ProductList">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="guaranteeDate" nillable="true" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="quantity" nillable="true" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getDeliveryType">
+        <s:complexType />
+      </s:element>
+      <s:element name="getDeliveryTypeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getDeliveryTypeResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AddOrderSoapIn">
+    <wsdl:part name="parameters" element="tns:AddOrder" />
+  </wsdl:message>
+  <wsdl:message name="AddOrderSoapOut">
+    <wsdl:part name="parameters" element="tns:AddOrderResponse" />
+  </wsdl:message>
+  <wsdl:message name="showProductsSoapIn">
+    <wsdl:part name="parameters" element="tns:showProducts" />
+  </wsdl:message>
+  <wsdl:message name="showProductsSoapOut">
+    <wsdl:part name="parameters" element="tns:showProductsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDeliveryTypeSoapIn">
+    <wsdl:part name="parameters" element="tns:getDeliveryType" />
+  </wsdl:message>
+  <wsdl:message name="getDeliveryTypeSoapOut">
+    <wsdl:part name="parameters" element="tns:getDeliveryTypeResponse" />
+  </wsdl:message>
+  <wsdl:portType name="StorageServiceSoap">
+    <wsdl:operation name="AddOrder">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">dodawanie zamowienia</wsdl:documentation>
+      <wsdl:input message="tns:AddOrderSoapIn" />
+      <wsdl:output message="tns:AddOrderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="showProducts">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Wyswietlanie dostepnych produktow</wsdl:documentation>
+      <wsdl:input message="tns:showProductsSoapIn" />
+      <wsdl:output message="tns:showProductsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="getDeliveryType">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">pobieranie dostepnych rodzajow przesylki</wsdl:documentation>
+      <wsdl:input message="tns:getDeliveryTypeSoapIn" />
+      <wsdl:output message="tns:getDeliveryTypeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="StorageServiceSoap" type="tns:StorageServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddOrder">
+      <soap:operation soapAction="http://storageService.org/AddOrder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="showProducts">
+      <soap:operation soapAction="http://storageService.org/showProducts" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDeliveryType">
+      <soap:operation soapAction="http://storageService.org/getDeliveryType" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="StorageServiceSoap12" type="tns:StorageServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddOrder">
+      <soap12:operation soapAction="http://storageService.org/AddOrder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="showProducts">
+      <soap12:operation soapAction="http://storageService.org/showProducts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDeliveryType">
+      <soap12:operation soapAction="http://storageService.org/getDeliveryType" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StorageService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">WebServices sluzacy do poloczenia z bazą magazynu</wsdl:documentation>
+    <wsdl:port name="StorageServiceSoap" binding="tns:StorageServiceSoap">
+      <soap:address location="http://localhost:51302/StorageService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="StorageServiceSoap12" binding="tns:StorageServiceSoap12">
+      <soap12:address location="http://localhost:51302/StorageService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WarehouseTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DeliveryMethods">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="method" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="orderDate" Type="date" />
+          <Property Name="address" Type="varchar" MaxLength="60" />
+          <Property Name="delivery" Type="int" Nullable="false" />
+          <Property Name="IdProduct" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="code" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="guaranteeDate" Type="date" />
+          <Property Name="idType" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="ProductTypes">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Orders__delivery__1B0907CE">
+          <End Role="DeliveryMethods" Type="Self.DeliveryMethods" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryMethods">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="delivery" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__IdProduc__1BFD2C07">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="IdProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__idType__173876EA">
+          <End Role="ProductTypes" Type="Self.ProductTypes" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="idType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="addOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nameProduct" Type="varchar" Mode="In" />
+          <Parameter Name="method" Type="varchar" Mode="In" />
+          <Parameter Name="address" Type="varchar" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="code" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="deleteAllUnsolicitedProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="deleteUnsolicitedProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="editProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+          <Parameter Name="code" Type="bigint" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="quarantee" Type="date" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getAvailableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="insertWare" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="code" Type="bigint" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="guaranteeDate" Type="date" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+          <Parameter Name="type" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="realizeOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="showOrders" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="showProductTypes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="WarehouseTModelStoreContainer">
+          <EntitySet Name="DeliveryMethods" EntityType="Self.DeliveryMethods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductTypes" EntityType="Self.ProductTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Orders__delivery__1B0907CE" Association="Self.FK__Orders__delivery__1B0907CE">
+            <End Role="DeliveryMethods" EntitySet="DeliveryMethods" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__IdProduc__1BFD2C07" Association="Self.FK__Orders__IdProduc__1BFD2C07">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__idType__173876EA" Association="Self.FK__Products__idType__173876EA">
+            <End Role="ProductTypes" EntitySet="ProductTypes" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WarehouseTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DeliveryMethod">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="method" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__delivery__1B0907CE" FromRole="DeliveryMethods" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="orderDate" Type="DateTime" Precision="0" />
+          <Property Name="address" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="delivery" Type="Int32" Nullable="false" />
+          <Property Name="IdProduct" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="DeliveryMethod" Relationship="Self.FK__Orders__delivery__1B0907CE" FromRole="Orders" ToRole="DeliveryMethods" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Orders__IdProduc__1BFD2C07" FromRole="Orders" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="code" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="guaranteeDate" Type="DateTime" Precision="0" />
+          <Property Name="idType" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__IdProduc__1BFD2C07" FromRole="Products" ToRole="Orders" />
+          <NavigationProperty Name="ProductType" Relationship="Self.FK__Products__idType__173876EA" FromRole="Products" ToRole="ProductTypes" />
+        </EntityType>
+        <EntityType Name="ProductType">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__idType__173876EA" FromRole="ProductTypes" ToRole="Products" />
+        </EntityType>
+        <Association Name="FK__Orders__delivery__1B0907CE">
+          <End Role="DeliveryMethods" Type="Self.DeliveryMethod" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeliveryMethods">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="delivery" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__IdProduc__1BFD2C07">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="IdProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__idType__173876EA">
+          <End Role="ProductTypes" Type="Self.ProductType" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductTypes">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="idType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WarehouseTEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DeliveryMethods" EntityType="Self.DeliveryMethod" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="ProductTypes" EntityType="Self.ProductType" />
+          <AssociationSet Name="FK__Orders__delivery__1B0907CE" Association="Self.FK__Orders__delivery__1B0907CE">
+            <End Role="DeliveryMethods" EntitySet="DeliveryMethods" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__IdProduc__1BFD2C07" Association="Self.FK__Orders__IdProduc__1BFD2C07">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__idType__173876EA" Association="Self.FK__Products__idType__173876EA">
+            <End Role="ProductTypes" EntitySet="ProductTypes" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <FunctionImport Name="addOrder">
+            <Parameter Name="nameProduct" Mode="In" Type="String" />
+            <Parameter Name="method" Mode="In" Type="String" />
+            <Parameter Name="address" Mode="In" Type="String" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="deleteAllUnsolicitedProducts" />
+          <FunctionImport Name="deleteUnsolicitedProducts" ReturnType="Collection(WarehouseTModel.deleteUnsolicitedProducts_Result)">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="editProducts">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+            <Parameter Name="code" Mode="In" Type="Int64" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="quarantee" Mode="In" Type="DateTime" />
+            <Parameter Name="type" Mode="In" Type="String" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getAvailableProducts" ReturnType="Collection(WarehouseTModel.getAvailableProducts_Result)" />
+          <FunctionImport Name="insertWare">
+            <Parameter Name="code" Mode="In" Type="Int64" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="guaranteeDate" Mode="In" Type="DateTime" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+            <Parameter Name="type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="realizeOrders">
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="showOrders" ReturnType="Collection(WarehouseTModel.showOrders_Result)" />
+          <FunctionImport Name="showProducts" ReturnType="Collection(WarehouseTModel.showProducts_Result)" />
+          <FunctionImport Name="showProductTypes" ReturnType="Collection(String)" />
+        </EntityContainer>
+        <ComplexType Name="deleteUnsolicitedProducts_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="code" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="guaranteeDate" Nullable="true" />
+          <Property Type="Int32" Name="idType" Nullable="false" />
+          <Property Type="Int32" Name="quantity" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="getAvailableProducts_Result">
+          <Property Type="Int64" Name="code" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="guaranteeDate" Nullable="true" />
+          <Property Type="Int32" Name="quantity" Nullable="true" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showOrders_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="DateTime" Name="orderDate" Nullable="true" />
+          <Property Type="String" Name="address" Nullable="true" MaxLength="60" />
+          <Property Type="Int32" Name="quantity" Nullable="true" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="method" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="showProducts_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="code" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="guaranteeDate" Nullable="true" />
+          <Property Type="Int32" Name="quantity" Nullable="true" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WarehouseTModelStoreContainer" CdmEntityContainer="WarehouseTEntities">
+          <EntitySetMapping Name="DeliveryMethods">
+            <EntityTypeMapping TypeName="WarehouseTModel.DeliveryMethod">
+              <MappingFragment StoreEntitySet="DeliveryMethods">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="method" ColumnName="method" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="WarehouseTModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="orderDate" ColumnName="orderDate" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="delivery" ColumnName="delivery" />
+                <ScalarProperty Name="IdProduct" ColumnName="IdProduct" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="WarehouseTModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="guaranteeDate" ColumnName="guaranteeDate" />
+                <ScalarProperty Name="idType" ColumnName="idType" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductTypes">
+            <EntityTypeMapping TypeName="WarehouseTModel.ProductType">
+              <MappingFragment StoreEntitySet="ProductTypes">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="addOrder" FunctionName="WarehouseTModel.Store.addOrder" />
+          <FunctionImportMapping FunctionImportName="deleteAllUnsolicitedProducts" FunctionName="WarehouseTModel.Store.deleteAllUnsolicitedProducts" />
+          <FunctionImportMapping FunctionImportName="deleteUnsolicitedProducts" FunctionName="WarehouseTModel.Store.deleteUnsolicitedProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseTModel.deleteUnsolicitedProducts_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="guaranteeDate" ColumnName="guaranteeDate" />
+                <ScalarProperty Name="idType" ColumnName="idType" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="editProducts" FunctionName="WarehouseTModel.Store.editProducts" />
+          <FunctionImportMapping FunctionImportName="getAvailableProducts" FunctionName="WarehouseTModel.Store.getAvailableProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseTModel.getAvailableProducts_Result">
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="guaranteeDate" ColumnName="guaranteeDate" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="insertWare" FunctionName="WarehouseTModel.Store.insertWare" />
+          <FunctionImportMapping FunctionImportName="realizeOrders" FunctionName="WarehouseTModel.Store.realizeOrders" />
+          <FunctionImportMapping FunctionImportName="showOrders" FunctionName="WarehouseTModel.Store.showOrders">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseTModel.showOrders_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="orderDate" ColumnName="orderDate" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="method" ColumnName="method" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="showProducts" FunctionName="WarehouseTModel.Store.showProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarehouseTModel.showProducts_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="code" ColumnName="code" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="guaranteeDate" ColumnName="guaranteeDate" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="showProductTypes" FunctionName="WarehouseTModel.Store.showProductTypes" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
